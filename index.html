@@ -1,0 +1,983 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bizim Hikayemiz ✨</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-gradient: linear-gradient(135deg, #ff6b9d 0%, #d84b6b 100%);
+            --secondary-gradient: linear-gradient(135deg, #f5a6c6 0%, #ff829d 100%);
+            --tertiary-gradient: linear-gradient(135deg, #ff9ab2 0%, #ffccd5 100%);
+            --glass-bg: rgba(255, 245, 247, 0.15);
+            --glass-border: rgba(255, 245, 247, 0.3);
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #1a0b14;
+            color: white;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        /* Background Animation */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: linear-gradient(45deg, #ff6b9d, #d84b6b, #f5a6c6, #ff829d, #ff9ab2, #ffccd5);
+            background-size: 600% 600%;
+            animation: gradientShift 12s ease infinite;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Scattered Hand-Drawn Hearts */
+        .scattered-hearts {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .scattered-heart {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            opacity: 0.3;
+            filter: drop-shadow(0 0 5px rgba(255, 107, 157, 0.5));
+        }
+
+        .scattered-heart svg {
+            width: 100%;
+            height: 100%;
+            fill: none;
+            stroke: #ff829d;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        /* Floating Particles & Decorations */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        .particle {
+            position: absolute;
+            font-size: 24px;
+            animation: float-particle 18s infinite linear;
+            opacity: 0;
+            filter: drop-shadow(0 0 8px rgba(255, 107, 157, 0.6));
+        }
+
+        .heart-particle {
+            color: #ff829d;
+            animation: float-heart 15s infinite linear;
+        }
+
+        .key-particle {
+            color: #ffd1dc;
+            animation: float-key 12s infinite linear;
+        }
+
+        @keyframes float-particle {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% { opacity: 0.9; }
+            90% { opacity: 0.9; }
+            100% {
+                transform: translateY(-100px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        @keyframes float-heart {
+            0% {
+                transform: translateY(100vh) rotate(0deg) scale(0.6);
+                opacity: 0;
+            }
+            10% { opacity: 1; }
+            50% { transform: translateY(50vh) rotate(180deg) scale(1.2); }
+            90% { opacity: 1; }
+            100% {
+                transform: translateY(-100px) rotate(360deg) scale(0.6);
+                opacity: 0;
+            }
+        }
+
+        @keyframes float-key {
+            0% {
+                transform: translateY(100vh) rotate(0deg) scale(0.7);
+                opacity: 0;
+            }
+            15% { opacity: 0.8; }
+            85% { opacity: 0.8; }
+            100% {
+                transform: translateY(-100px) rotate(180deg) scale(0.7);
+                opacity: 0;
+            }
+        }
+
+        /* Drawing Hearts Animation */
+        .draw-heart {
+            position: absolute;
+            width: 70px;
+            height: 70px;
+            opacity: 0;
+            animation: drawHeartPath 10s infinite;
+        }
+
+        .draw-heart svg {
+            width: 100%;
+            height: 100%;
+            fill: none;
+            stroke: #ff829d;
+            stroke-width: 2.5;
+            filter: drop-shadow(0 0 12px rgba(255, 107, 157, 0.7));
+        }
+
+        .draw-heart path {
+            stroke-dasharray: 220;
+            stroke-dashoffset: 220;
+            animation: drawPath 3.5s ease-in-out infinite;
+        }
+
+        .sparkle {
+            position: absolute;
+            width: 5px;
+            height: 5px;
+            background: #ffd1dc;
+            border-radius: 50%;
+            animation: sparkle 2.5s infinite;
+            filter: drop-shadow(0 0 5px rgba(255, 209, 220, 0.8));
+        }
+
+        @keyframes sparkle {
+            0%, 100% {
+                opacity: 0;
+                transform: scale(0);
+            }
+            50% {
+                opacity: 1;
+                transform: scale(1.2);
+            }
+        }
+
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 2rem;
+            position: relative;
+        }
+
+        .hero-content {
+            z-index: 2;
+            transform-style: preserve-3d;
+        }
+
+        .hero h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(3rem, 8vw, 6rem);
+            font-weight: 700;
+            background: linear-gradient(45deg, #fff, #f5a6c6, #fff, #ff9ab2);
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: textShimmer 3.5s ease-in-out infinite;
+            margin-bottom: 2rem;
+            transform: translateZ(50px);
+        }
+
+        @keyframes textShimmer {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .hero-subtitle {
+            font-size: 1.5rem;
+            font-weight: 300;
+            opacity: 0.9;
+            margin-bottom: 3rem;
+            transform: translateZ(30px);
+            animation: fadeInUp 1s ease-out 0.5s both;
+        }
+
+        .hero-stats {
+            display: flex;
+            gap: 4rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            transform: translateZ(20px);
+        }
+
+        .stat {
+            text-align: center;
+            animation: fadeInUp 1s ease-out 1s both;
+        }
+
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 700;
+            background: var(--secondary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px) translateZ(0);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) translateZ(0);
+            }
+        }
+
+        /* Timeline */
+        .timeline-container {
+            padding: 100px 20px;
+            max-width: 1400px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .section-title {
+            text-align: center;
+            font-family: 'Playfair Display', serif;
+            font-size: 3.5rem;
+            font-weight: 600;
+            margin-bottom: 4rem;
+            background: linear-gradient(45deg, #fff, #f5a6c6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .timeline {
+            position: relative;
+        }
+
+        .memory-card {
+            margin: 150px 0;
+            opacity: 0;
+            transform: translateY(100px) rotateX(15deg);
+            transition: all 1s cubic-bezier(0.16, 1, 0.3, 1);
+            perspective: 1000px;
+        }
+
+        .memory-card.reveal {
+            opacity: 1;
+            transform: translateY(0) rotateX(0);
+        }
+
+        .memory-card:nth-child(even) .card-content {
+            flex-direction: row-reverse;
+        }
+
+        .card-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 30px;
+            padding: 4rem;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.5s ease;
+        }
+
+        .card-content::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(255,245,247,0.15) 0%, rgba(255,245,247,0.05) 100%);
+            z-index: -1;
+        }
+
+        .card-content:hover {
+            transform: translateY(-10px) scale(1.02);
+        }
+
+        .photo-section {
+            position: relative;
+            transform-style: preserve-3d;
+        }
+
+        .photo-frame {
+            width: 100%;
+            max-width: 400px;
+            aspect-ratio: 1;
+            border-radius: 25px;
+            overflow: hidden;
+            position: relative;
+            background: var(--secondary-gradient);
+            box-shadow: 
+                0 25px 50px rgba(0,0,0,0.3),
+                0 0 50px rgba(245, 166, 198, 0.3);
+            transition: all 0.5s ease;
+            transform: rotateY(5deg) rotateX(5deg);
+        }
+
+        .photo-frame:hover {
+            transform: rotateY(0deg) rotateX(0deg) scale(1.05);
+            box-shadow: 
+                0 35px 70px rgba(0,0,0,0.4),
+                0 0 80px rgba(245, 166, 198, 0.5);
+        }
+
+        .photo-placeholder {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #ff6b9d 0%, #d84b6b 100%);
+            color: white;
+            position: relative;
+        }
+
+        .photo-placeholder img, .photo-placeholder video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .photo-placeholder::after {
+            content: 'Fotoğrafınızı ekleyin';
+            position: absolute;
+            bottom: 20px;
+            font-size: 0.9rem;
+            opacity: 0.7;
+            font-family: 'Inter', sans-serif;
+            color: #fff;
+        }
+
+        .content-section h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, #fff, #ff9ab2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .date-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: var(--tertiary-gradient);
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 20px rgba(255, 154, 178, 0.3);
+        }
+
+        .love-message {
+            font-size: 1.2rem;
+            line-height: 1.8;
+            opacity: 0.9;
+            font-weight: 300;
+            position: relative;
+            padding-left: 2rem;
+        }
+
+        .love-message::before {
+            content: '"';
+            position: absolute;
+            left: 0;
+            top: -10px;
+            font-size: 4rem;
+            font-family: 'Playfair Display', serif;
+            opacity: 0.3;
+            background: var(--secondary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Final Section */
+        .final-section {
+            padding: 150px 20px;
+            text-align: center;
+            background: linear-gradient(135deg, rgba(26,11,20,0.8) 0%, rgba(26,11,20,0.9) 100%);
+            backdrop-filter: blur(20px);
+            margin-top: 100px;
+        }
+
+        .final-section h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 4rem;
+            font-weight: 700;
+            margin-bottom: 3rem;
+            background: linear-gradient(45deg, #f5a6c6, #ff829d, #ff9ab2, #ffccd5);
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: textShimmer 4s ease-in-out infinite;
+        }
+
+        .final-message {
+            font-size: 1.4rem;
+            line-height: 2;
+            max-width: 800px;
+            margin: 0 auto;
+            font-weight: 300;
+            opacity: 0.9;
+        }
+
+        .love-counter {
+            margin-top: 4rem;
+            font-size: 1.2rem;
+            opacity: 0.8;
+        }
+
+        .counter-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #f5a6c6;
+        }
+
+        /* Music Player */
+        .music-player {
+            margin-top: 4rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(255, 154, 178, 0.3);
+        }
+
+        .music-player h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(45deg, #fff, #ff9ab2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .music-player audio {
+            width: 100%;
+            outline: none;
+        }
+
+        audio::-webkit-media-controls-panel {
+            background: var(--secondary-gradient);
+            border-radius: 10px;
+        }
+
+        audio::-webkit-media-controls-play-button,
+        audio::-webkit-media-controls-volume-slider,
+        audio::-webkit-media-controls-seek-back-button,
+        audio::-webkit-media-controls-seek-forward-button,
+        audio::-webkit-media-controls-current-time-display,
+        audio::-webkit-media-controls-time-remaining-display {
+            color: white;
+        }
+
+        /* Scroll Progress */
+        .scroll-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, #f5a6c6, #ff829d, #ff9ab2, #ffccd5);
+            transform-origin: left;
+            transform: scaleX(0);
+            z-index: 1000;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .card-content {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+                padding: 3rem;
+            }
+            
+            .memory-card:nth-child(even) .card-content {
+                flex-direction: column;
+            }
+            
+            .hero-stats {
+                gap: 2rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .section-title {
+                font-size: 2.5rem;
+            }
+            
+            .content-section h3 {
+                font-size: 2rem;
+            }
+            
+            .card-content {
+                padding: 2rem;
+                margin: 1rem;
+            }
+            
+            .final-section h2 {
+                font-size: 2.5rem;
+            }
+            
+            .hero-subtitle {
+                font-size: 1.2rem;
+            }
+            
+            .music-player h3 {
+                font-size: 1.5rem;
+            }
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 245, 247, 0.1);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--secondary-gradient);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--tertiary-gradient);
+        }
+    </style>
+</head>
+<body>
+    <!-- Background Animation -->
+    <div class="bg-animation"></div>
+    
+    <!-- Scattered Hand-Drawn Hearts -->
+    <div class="scattered-hearts" id="scatteredHearts"></div>
+    
+    <!-- Floating Particles -->
+    <div class="particles" id="particles"></div>
+    
+    <!-- Drawing Hearts -->
+    <div class="drawing-hearts" id="drawingHearts"></div>
+    
+    <!-- Scroll Progress -->
+    <div class="scroll-progress" id="scrollProgress"></div>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Seni Çok Seviyorum Ceren'im</h1>
+            <p class="hero-subtitle">Bir aşk hikayesi, sonsuz anılar 💕</p>
+            <div class="hero-stats">
+                <div class="stat">
+                    <span class="stat-number" id="daysCounter">0</span>
+                    <span class="stat-label">Günler</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-number" id="hoursCounter">0</span>
+                    <span class="stat-label">Saatler</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-number">∞</span>
+                    <span class="stat-label">Sevgi</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Timeline -->
+    <section class="timeline-container">
+        <h2 class="section-title">Bizim Hikayemiz</h2>
+        
+        <div class="timeline">
+            <div class="memory-card">
+                <div class="card-content">
+                    <div class="photo-section">
+                        <div class="photo-frame">
+                            <div class="photo-placeholder">
+                                <img src="foto/photo1.jpg" alt="İlk Görüşme">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="content-section">
+                        <div class="date-badge">
+                            <span>✨</span>
+                            İlk Görüşme
+                        </div>
+                        <h3>İlk Bakış</h3>
+                        <p class="love-message">
+                            O gün seni ilk gördüğümde, zamanın durduğunu hissetmiştim. Gözlerin benim ruhuma dokundu ve o andan itibaren kalbim sadece senin için atmaya başladı. Ben yanında satranç oynarken sen de benim gönlümle oynuyor, sen yanıma HZ. Yusuf izlerken ben de senin güzelliğine kapılıyordum.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="memory-card">
+                <div class="card-content">
+                    <div class="photo-section">
+                        <div class="photo-frame">
+                            <div class="photo-placeholder">
+                                <video controls muted>
+                                    <source src="foto/1.mp4" type="video/mp4">
+                                    Tarayıcınız video oynatmayı desteklemiyor.
+                                </video>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="content-section">
+                        <div class="date-badge">
+                            <span>💫</span>
+                            İlk "Seni Seviyorum"
+                        </div>
+                        <h3>Kalbin Dili</h3>
+                        <p class="love-message">
+                            O iki kelimeyi yazdığım ve sonrasında da sana söylediğim an, sanki ruhum özgürleşti. "Seni seviyorum" demek hiç bu kadar doğal gelmemişti. Sen de aynı şeyleri hissettiğini söylediğinde, dünyam tamamen değişti. İşte o an, gerçek mutluluğu tattım.(beyti 2. sıraya düştü)
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="memory-card">
+                <div class="card-content">
+                    <div class="photo-section">
+                        <div class="photo-frame">
+                            <div class="photo-placeholder">
+                                <img src="foto/photo2.jpg" alt="İlk Randevumuz">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="content-section">
+                        <div class="date-badge">
+                            <span>🌹</span>
+                            İlk Randevumuz
+                        </div>
+                        <h3>Büyülü Başlangıç</h3>
+                        <p class="love-message">
+                            İlk randevumuzda seninle yağmurda ıslanıp Dünyamın en güzel 3 saatini geçirirken, sanki yıllardır bunu bekliyormuş gibi hissettim. Gülüşün Nallıhan'ı aydınlatıyor, her kelimen kalbimde eko yapıyordu. O gün eve dönerken şükür namazı kılacaktım nerdeyse.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="memory-card">
+                <div class="card-content">
+                    <div class="photo-section">
+                        <div class="photo-frame">
+                            <div class="photo-placeholder">
+                                <img src="foto/photo4.jpg" alt="1. Ayımız">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="content-section">
+                        <div class="date-badge">
+                            <span>🎉</span>
+                            1. Ayımız
+                        </div>
+                        <h3>İlk Milestone</h3>
+                        <p class="love-message">
+                            Bir ay tamamlandığında, sanki bir ömür yaşamışım gibi hissettim. Seninle geçirdiğim her an, her gün beni daha mutlu ediyor. Bu sadece başlangıçmış, daha nice güzel günler bizi bekliyor...
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="memory-card">
+                <div class="card-content">
+                    <div class="photo-section">
+                        <div class="photo-frame">
+                            <div class="photo-placeholder">
+                                <img src="foto/photo5.jpg" alt="En Özel Anımız">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="content-section">
+                        <div class="date-badge">
+                            <span>💝</span>
+                            En Özel Anımız
+                        </div>
+                        <h3>Mükemmel Uyum</h3>
+                        <p class="love-message">
+                            
+                            Senin benim yanımda olduğun her an benim en özel anım bi gün olsun hiçbir şey yapmayalım, sadece birbirimizin yanında olalım. Konuşalım, gülelim, susalım... Mutluluk büyük şeylerde değil, seninle paylaştığım küçük anlarda...
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="memory-card">
+                <div class="card-content">
+                    <div class="photo-section">
+                        <div class="photo-frame">
+                            <div class="photo-placeholder">
+                                <img src="foto/photo6.jpg" alt="2. Ayımız">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="content-section">
+                        <div class="date-badge">
+                            <span>🥳</span>
+                            2. Ayımız - Bugün
+                        </div>
+                        <h3>Yeni Başlangıçlar</h3>
+                        <p class="love-message">
+                            İki ay geçti ama sanki daha yeni tanışmışız gibi heyecanlıyım. Her gün seni yeniden tanıyor, her gün daha çok âşık oluyorum. Bu hikayenin en güzel bölümleri daha yazılmadı bile...
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Final Section -->
+    <section class="final-section">
+        <h2>Sonsuza Kadar ∞</h2>
+        <p class="final-message">
+            Bu iki ay, hayatımın en güzel iki ayı oldu. Seninle her gün yeni bir sayfa açıyoruz, her gün yeni bir rüya kuruyoruz. 
+            Geleceğe baktığımda seni görüyorum, umutlarıma baktığımda seni görüyorum. 
+            Bu sadece başlangıç aşkım... Daha nice aylar, yıllar boyunca birlikte olacağız.
+        </p>
+        <div class="love-counter">
+            <div>Seni seveli geçen süre:</div>
+            <div class="counter-number" id="liveCounter">60 gün, 0 saat, 0 dakika</div>
+        </div>
+        <div class="music-player">
+            <h3>Benden sana bir armağan</h3>
+            <audio controls>
+                <source src="foto/asd.mp3" type="audio/mpeg">
+                Tarayıcınız ses oynatmayı desteklemiyor.
+            </audio>
+        </div>
+    </section>
+
+    <script>
+        // Counter Animation Function
+        function animateCounter(element, start, end, duration) {
+            let startTimestamp = null;
+            const step = (timestamp) => {
+                if (!startTimestamp) startTimestamp = timestamp;
+                const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+                const easedProgress = progress < 0.5 
+                    ? 2 * progress * progress 
+                    : 1 - Math.pow(-2 * progress + 2, 2) / 2; // Ease-in-out
+                const current = Math.floor(start + easedProgress * (end - start));
+                element.textContent = current;
+                if (progress < 1) {
+                    requestAnimationFrame(step);
+                }
+            };
+            requestAnimationFrame(step);
+        }
+
+        // Scattered Hand-Drawn Hearts
+        function createScatteredHearts() {
+            const container = document.getElementById('scatteredHearts');
+            const heartSvg = `
+                <svg viewBox="0 0 24 24">
+                    <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                </svg>
+            `;
+            
+            for (let i = 0; i < 20; i++) {
+                const heart = document.createElement('div');
+                heart.className = 'scattered-heart';
+                heart.innerHTML = heartSvg;
+                
+                const side = Math.floor(Math.random() * 4);
+                let style;
+                switch (side) {
+                    case 0: // Left
+                        style = `left: ${Math.random() * 5}%; top: ${Math.random() * 100}%; transform: rotate(${Math.random() * 30 - 15}deg);`;
+                        break;
+                    case 1: // Right
+                        style = `right: ${Math.random() * 5}%; top: ${Math.random() * 100}%; transform: rotate(${Math.random() * 30 - 15}deg);`;
+                        break;
+                    case 2: // Top
+                        style = `top: ${Math.random() * 5}%; left: ${Math.random() * 100}%; transform: rotate(${Math.random() * 30 - 15}deg);`;
+                        break;
+                    case 3: // Bottom
+                        style = `bottom: ${Math.random() * 5}%; left: ${Math.random() * 100}%; transform: rotate(${Math.random() * 30 - 15}deg);`;
+                        break;
+                }
+                heart.style.cssText = style;
+                heart.style.opacity = Math.random() * 0.3 + 0.2;
+                heart.style.width = `${Math.random() * 30 + 30}px`;
+                heart.style.height = heart.style.width;
+                container.appendChild(heart);
+            }
+        }
+
+        // Floating Particles with Hearts and Keys
+        function createParticles() {
+            const particles = document.getElementById('particles');
+            const heartSymbols = ['💖', '💕', '💗', '💘', '❤️', '💝'];
+            const keySymbols = ['🗝️', '🔑'];
+            
+            for (let i = 0; i < 50; i++) {
+                const particle = document.createElement('div');
+                
+                if (i % 3 === 0) {
+                    particle.className = 'particle heart-particle';
+                    particle.textContent = heartSymbols[Math.floor(Math.random() * heartSymbols.length)];
+                } else if (i % 5 === 0) {
+                    particle.className = 'particle key-particle';
+                    particle.textContent = keySymbols[Math.floor(Math.random() * keySymbols.length)];
+                } else {
+                    particle.className = 'particle sparkle';
+                }
+                
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 18 + 's';
+                particle.style.animationDuration = (Math.random() * 12 + 10) + 's';
+                particles.appendChild(particle);
+            }
+        }
+
+        // Drawing Hearts Animation
+        function createDrawingHearts() {
+            const container = document.getElementById('drawingHearts');
+            
+            function addDrawingHeart() {
+                const heart = document.createElement('div');
+                heart.className = 'draw-heart';
+                heart.style.top = Math.random() * 80 + 10 + '%';
+                heart.innerHTML = `
+                    <svg viewBox="0 0 24 24">
+                        <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                    </svg>
+                `;
+                container.appendChild(heart);
+                
+                setTimeout(() => {
+                    heart.remove();
+                }, 10000);
+            }
+            
+            setInterval(addDrawingHeart, 2000);
+            addDrawingHeart();
+        }
+
+        // Scroll Progress
+        function updateScrollProgress() {
+            const scrollProgress = document.getElementById('scrollProgress');
+            const scrollTop = document.documentElement.scrollTop;
+            const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrollPercent = (scrollTop / scrollHeight);
+            scrollProgress.style.transform = `scaleX(${scrollPercent})`;
+        }
+
+        // Reveal Animation
+        function revealMemories() {
+            const memories = document.querySelectorAll('.memory-card');
+            memories.forEach(memory => {
+                const memoryTop = memory.getBoundingClientRect().top;
+                const windowHeight = window.innerHeight;
+                
+                if (memoryTop < windowHeight * 0.8) {
+                    memory.classList.add('reveal');
+                }
+            });
+        }
+
+        // Live Counter
+        function updateLiveCounter() {
+            const startDate = new Date();
+            startDate.setDate(startDate.getDate() - 60);
+            
+            const now = new Date();
+            const diff = now - startDate;
+            
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            
+            document.getElementById('liveCounter').textContent = 
+                `${days} gün, ${hours} saat, ${minutes} dakika`;
+        }
+
+        // Initialize
+        window.addEventListener('load', () => {
+            createScatteredHearts();
+            createParticles();
+            createDrawingHearts();
+            updateLiveCounter();
+            revealMemories();
+            
+            // Start counter animations
+            const daysCounter = document.getElementById('daysCounter');
+            const hoursCounter = document.getElementById('hoursCounter');
+            animateCounter(daysCounter, 0, 60, 2000); // Animate days from 0 to 60 over 2 seconds
+            animateCounter(hoursCounter, 0, 1440, 2000); // Animate hours from 0 to 1440 over 2 seconds
+        });
+
+        window.addEventListener('scroll', () => {
+            updateScrollProgress();
+            revealMemories();
+        });
+
+        setInterval(updateLiveCounter, 60000);
+    </script>
+</body>
+</html>
