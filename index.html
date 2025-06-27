@@ -964,6 +964,7 @@
             createDrawingHearts();
             updateLiveCounter();
             revealMemories();
+            updateAnimatedCounters();
             
             // Start counter animations
             const daysCounter = document.getElementById('daysCounter');
@@ -971,6 +972,22 @@
             animateCounter(daysCounter, 0, 60, 2000); // Animate days from 0 to 60 over 2 seconds
             animateCounter(hoursCounter, 0, 1440, 2000); // Animate hours from 0 to 1440 over 2 seconds
         });
+
+
+        function updateAnimatedCounters() {
+            const start = new Date("2025-04-26T21:30:00");
+            const now = new Date();
+        
+            const diffMs = now - start;
+            const days = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+            const hours = Math.floor(diffMs / (1000 * 60 * 60));
+        
+            const daysCounter = document.getElementById('daysCounter');
+            const hoursCounter = document.getElementById('hoursCounter');
+            animateCounter(daysCounter, 0, days, 2000);
+            animateCounter(hoursCounter, 0, hours, 2000);
+        }
+
 
         window.addEventListener('scroll', () => {
             updateScrollProgress();
